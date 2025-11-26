@@ -3,7 +3,6 @@ from app.core.http_client import client_1688
 
 class SearchService:
 
-
     async def search_keyword(self, query: str):
         return await client_1688.get(
             "/marketplaces/1688/search/keyword/",
@@ -33,7 +32,6 @@ class SearchService:
 
         return response
 
-
     async def search_by_image_id(self, image_id):
         params = {
             "image_id": image_id,
@@ -51,10 +49,7 @@ class SearchService:
         )
         return response
 
-
-
     async def search_photo(self, file):
-
         upload_info = await self.upload_photo(file)
         image_id = upload_info["data"]["image_id"]
 
@@ -66,14 +61,3 @@ class SearchService:
             "upload_info": upload_info,
             "results": results,
         }
-    
-    async def request_1688_details(offer_id: str):
-        url = f"{BACKEND_URL}/search/product?offer_id={offer_id}"
-
-        async with httpx.AsyncClient(timeout=20) as client:
-            r = await client.get(url)
-
-            if r.status_code != 200:
-                return None
-
-            return r.json()
