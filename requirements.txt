@@ -7,3 +7,4 @@ pydantic-settings
 SQLAlchemy
 asyncpg
 alembic
+python-multipart==0.0.9
