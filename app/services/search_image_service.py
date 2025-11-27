@@ -21,7 +21,7 @@ class SearchImageService:
             files=files
         )
 
-        # image_id лежит тут:
+        
         image_id = response["data"]["image_id"]
 
         return {

@@ -3,7 +3,7 @@ from sqlalchemy.orm import relationship
 
 from app.db.base import Base
 
-# ---------- User ----------
+
 class User(Base):
     __tablename__ = "users"
 
@@ -15,7 +15,7 @@ class User(Base):
     cart_items = relationship("CartItem", back_populates="user")
 
 
-# ---------- Cart ----------
+
 class CartItem(Base):
     __tablename__ = "cart_items"
 
@@ -32,7 +32,7 @@ class CartItem(Base):
     user = relationship("User", back_populates="cart_items")
 
 
-# ---------- Favorites ----------
+
 class FavoriteItem(Base):
     __tablename__ = "favorite_items"
 
@@ -46,7 +46,7 @@ class FavoriteItem(Base):
     user = relationship("User", back_populates="favorites")
 
 
-# ---------- Product Cache (для WebView) ----------
+
 class ProductCache(Base):
     __tablename__ = "product_cache"
 
@@ -55,4 +55,4 @@ class ProductCache(Base):
     title = Column(String)
     image = Column(String)
     price_kzt = Column(Float)
-    raw_json = Column(Text)  # оригинальный JSON из 1688
+    raw_json = Column(Text)  

@@ -8,7 +8,7 @@ from app.db.session import get_session
 router = APIRouter(prefix="/favorites", tags=["Favorites"])
 
 
-# -------- Добавить в избранное --------
+
 @router.post("/add")
 async def add_favorite(
     telegram_id: str,
@@ -41,7 +41,7 @@ async def add_favorite(
     }
 
 
-# -------- Удалить из избранного --------
+
 @router.delete("/remove")
 async def remove_favorite(
     telegram_id: str,
@@ -59,7 +59,7 @@ async def remove_favorite(
     return {"status": "ok" if ok else "not_found"}
 
 
-# -------- Получить список избранного --------
+
 @router.get("/list")
 async def list_favorites(
     telegram_id: str,

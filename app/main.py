@@ -15,7 +15,7 @@ from app.api.v1.product.routes import router as product_router
 
 app = FastAPI(title="Silky Backend API", version="1.0.0")
 
-# CORS для WebView
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -23,7 +23,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Роутеры
+
 app.include_router(search_router, prefix="/api/v1/search", tags=["Search"])
 app.include_router(users_router, prefix="/api/v1/users", tags=["Users"])
 app.include_router(favorites_router, prefix="/api/v1/favorites", tags=["Favorites"])

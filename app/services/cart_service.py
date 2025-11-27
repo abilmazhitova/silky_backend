@@ -7,7 +7,7 @@ from app.core.config import settings
 import httpx
 
 
-# ----- 1688 API получения подробностей по товару -----
+
 
 async def fetch_product_detail(offer_id: str):
     url = f"{settings.API_1688_URL}/marketplaces/1688/product/detail/"
@@ -24,7 +24,7 @@ async def fetch_product_detail(offer_id: str):
         return data["data"]["result"]["result"]
 
 
-# ----- Добавление товара в корзину -----
+
 
 async def add_to_cart(
     session: AsyncSession,
@@ -32,7 +32,7 @@ async def add_to_cart(
     offer_id: str,
     sku_id: str,
 ):
-    # 1. Найти или создать пользователя
+    
     result = await session.execute(select(User).where(User.telegram_id == telegram_id))
     user = result.scalar_one_or_none()
 
@@ -41,22 +41,22 @@ async def add_to_cart(
         session.add(user)
         await session.flush()
 
-    # 2. Загрузить подробно товар из 1688
+    
     product = await fetch_product_detail(offer_id)
 
-    # 3. Найти SKU
+    
     sku = next((s for s in product["productSkuInfos"] if str(s["skuId"]) == str(sku_id)), None)
     if not sku:
         raise ValueError("Такого SKU нет у товара")
 
-    # 4. Общие данные товара
+    
     title = product["subjectTrans"]
     base_image = product["productImage"]["images"][0]
 
-    # 5. Картинка конкретного SKU (если есть)
+    
     sku_image = sku["skuAttributes"][0].get("skuImageUrl", base_image)
 
-    # 6. Цвет и другие характеристики
+    
     selected_color = None
     selected_size = None
 
@@ -66,10 +66,10 @@ async def add_to_cart(
         if attr["attributeNameTrans"] in ("емкость", "размер", "size"):
             selected_size = attr["valueTrans"]
 
-    # 7. Цена
-    price_kzt = float(sku["fenxiaoPriceInfo"]["onePiecePrice"]) * 76.5 * 1.3  # или бери из priceRangeList
+  
+    price_kzt = float(sku["fenxiaoPriceInfo"]["onePiecePrice"]) * 76.5 * 1.3  
 
-    # 8. Проверяем — есть ли уже такой товар + sku
+   
     result = await session.execute(
         select(CartItem).where(
             CartItem.user_id == user.id,
@@ -99,7 +99,7 @@ async def add_to_cart(
     return {"status": "ok"}
 
 
-# ----- Получить корзину -----
+
 
 async def get_cart(session: AsyncSession, telegram_id: str):
     result = await session.execute(
@@ -116,7 +116,7 @@ async def get_cart(session: AsyncSession, telegram_id: str):
     return items
 
 
-# ----- Удалить из корзины -----
+
 
 async def remove_item(session: AsyncSession, telegram_id: str, item_id: int):
     result = await session.execute(select(User).where(User.telegram_id == telegram_id))
@@ -131,7 +131,7 @@ async def remove_item(session: AsyncSession, telegram_id: str, item_id: int):
     return True
 
 
-# ----- Изменить количество -----
+
 
 async def change_qty(session: AsyncSession, telegram_id: str, item_id: int, qty: int):
     result = await session.execute(select(User).where(User.telegram_id == telegram_id))

@@ -9,7 +9,7 @@ from app.db.session import get_session
 router = APIRouter(prefix="/cart", tags=["Cart"])
 
 
-# ❗ создать пользователя, если его нет
+
 async def get_or_create_user(session: AsyncSession, telegram_id: str):
     result = await session.execute(select(User).where(User.telegram_id == telegram_id))
     user = result.scalars().first()
@@ -23,7 +23,7 @@ async def get_or_create_user(session: AsyncSession, telegram_id: str):
     return user
 
 
-# ➕ 1. ДОБАВИТЬ ТОВАР В КОРЗИНУ
+
 @router.post("/add")
 async def add_to_cart(
     data: AddToCartRequest,
@@ -32,7 +32,7 @@ async def add_to_cart(
 ):
     user = await get_or_create_user(session, telegram_id)
 
-    # проверяем — не лежит ли этот SKU уже в корзине
+    
     result = await session.execute(
         select(CartItem).where(
             CartItem.user_id == user.id,
@@ -48,7 +48,7 @@ async def add_to_cart(
         await session.commit()
         return {"status": "updated", "item_id": existing_item.id}
 
-    # создаем новую запись
+    
     new_item = CartItem(
         user_id=user.id,
         product_id=data.product_id,
@@ -67,7 +67,7 @@ async def add_to_cart(
     return {"status": "added", "item_id": new_item.id}
 
 
-# 🛒 2. ПОЛУЧИТЬ КОРЗИНУ
+
 @router.get("/")
 async def get_cart(telegram_id: str, session: AsyncSession = Depends(get_session)):
     user = await get_or_create_user(session, telegram_id)
@@ -80,7 +80,7 @@ async def get_cart(telegram_id: str, session: AsyncSession = Depends(get_session
     return items
 
 
-# ❌ 3. УДАЛИТЬ ТОВАР
+
 @router.delete("/remove/{item_id}")
 async def remove_from_cart(item_id: int, session: AsyncSession = Depends(get_session)):
     result = await session.execute(select(CartItem).where(CartItem.id == item_id))

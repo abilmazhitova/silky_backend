@@ -16,7 +16,7 @@ class UserService:
         if user:
             return user
 
-        # Создаём нового пользователя
+        
         user = User(telegram_id=telegram_id)
         session.add(user)
         await session.commit()
@@ -31,7 +31,7 @@ class UserService:
         user = result.scalar_one_or_none()
 
         if not user:
-            # Если Telegram юзера нет — создаём
+            
             user = User(
                 telegram_id=telegram_id,
                 app_user_id=app_user_id

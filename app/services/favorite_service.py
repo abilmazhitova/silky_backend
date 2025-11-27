@@ -14,7 +14,7 @@ class FavoriteService:
         image: str,
         price_kzt: float,
     ):
-        # Проверяем, есть ли такой товар уже в избранном
+       
         result = await session.execute(
             select(FavoriteItem).where(
                 FavoriteItem.user_id == user_id,
@@ -24,7 +24,7 @@ class FavoriteService:
         existing = result.scalar_one_or_none()
 
         if existing:
-            return existing  # уже в избранном
+            return existing 
 
         item = FavoriteItem(
             user_id=user_id,
