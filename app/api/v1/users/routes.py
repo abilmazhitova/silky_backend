@@ -47,3 +47,19 @@ async def get_user(telegram_id: str, session: AsyncSession = Depends(get_session
         "telegram_id": user.telegram_id,
         "app_user_id": user.app_user_id
     }
+
+
+@router.patch("/set-language")
+async def set_language(
+    telegram_id: str,
+    language_code: str,
+    session: AsyncSession = Depends(get_session)
+):
+    user = await UserService.set_language(session, telegram_id, language_code)
+
+    return {
+        "status": "ok",
+        "message": "Language updated",
+        "telegram_id": telegram_id,
+        "language_code": language_code
+    }

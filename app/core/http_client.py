@@ -19,8 +19,8 @@ class HTTPClient1688:
     async def post(self, endpoint: str, params=None, data=None, files=None):
         r = await self.client.post(
             endpoint,
-            params=params,   # ← добавили!
-            data=data,       # ← json нельзя + multipart одновременно
+            params=params, 
+            data=data,      
             files=files
         )
         r.raise_for_status()

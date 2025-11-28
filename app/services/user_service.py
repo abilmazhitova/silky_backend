@@ -1,3 +1,4 @@
+from fastapi import HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
@@ -50,3 +51,20 @@ class UserService:
             select(User).where(User.telegram_id == telegram_id)
         )
         return result.scalar_one_or_none()
+
+
+    @staticmethod
+    async def set_language(session: AsyncSession, telegram_id: str, language_code: str):
+        result = await session.execute(
+            select(User).where(User.telegram_id == telegram_id)
+        )
+        user = result.scalar_one_or_none()
+
+        if not user:
+            raise HTTPException(404, "User not found")
+
+        user.language_code = language_code
+        await session.commit()
+        await session.refresh(user)
+
+        return user

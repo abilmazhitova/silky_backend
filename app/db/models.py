@@ -10,6 +10,7 @@ class User(Base):
     id = Column(Integer, primary_key=True)
     telegram_id = Column(String, unique=True, index=True)
     app_user_id = Column(String, nullable=True)
+    language_code = Column(String, default="ru")
 
     favorites = relationship("FavoriteItem", back_populates="user")
     cart_items = relationship("CartItem", back_populates="user")
