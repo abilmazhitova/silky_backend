@@ -3,11 +3,20 @@ from app.core.http_client import client_1688
 
 class SearchService:
 
-    async def search_keyword(self, query: str):
+    async def search_keyword(self, query: str, country: str):
         return await client_1688.get(
             "/marketplaces/1688/search/keyword/",
-            params={"keyword": query}
+            params={
+                "keyword": query,
+                "country": country,
+                "filter_forbidden_cats": True,
+                "spell_check": True,
+                "from_recent": False,
+                "begin_page": 1,
+                "page_size": 10
+            }
         )
+
 
     async def upload_photo(self, file, user_id=None, out_member_id=None):
         files = {

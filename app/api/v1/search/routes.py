@@ -5,9 +5,10 @@ service = SearchService()
 
 
 @search_router.get("/keyword")
-async def search_by_keyword(q: str):
-    result = await service.search_keyword(q)
+async def search_by_keyword(q: str, country: str = "ru"):
+    result = await service.search_keyword(q, country)
     return result
+
 
 
 @search_router.post("/photo/upload")
